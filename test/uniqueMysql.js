@@ -1,4 +1,5 @@
-let sails = require('sails');
+const Sails = require('sails').Sails;
+const sails = new Sails();
 
 chai = require('chai');
 expect = chai.expect;
@@ -8,7 +9,7 @@ describe('reproduce unique validation bug with mysql adapter', () => {
   before(function (done) {
     this.timeout(5000);
 
-    sails.lift({
+    sails.load({
       log: {
         level: 'silent'
       },
@@ -43,7 +44,7 @@ describe('reproduce unique validation bug with mysql adapter', () => {
     });
   });
 
-  it('return validation error only for login attribute', done => {
+  it('return validation errors only for login attribute', done => {
     User.create({login: 'test', email: 'test@gmail.com'}).catch(err => {
       expect(err.ValidationError).to.be.not.null;
       expect(err.ValidationError.login).to.be.not.null;
@@ -53,7 +54,7 @@ describe('reproduce unique validation bug with mysql adapter', () => {
     })
   });
 
-  it('return validation error only for email attribute', done => {
+  it('return validation errors only for email attribute', done => {
     User.create({login: 'test2', email: 'test@gmail.com'}).catch(err => {
       expect(err.ValidationError).to.be.not.null;
       expect(err.ValidationError.email).to.be.not.null;
@@ -69,7 +70,6 @@ describe('reproduce unique validation bug with mysql adapter', () => {
     }
   });
 });
-
 
 
 
